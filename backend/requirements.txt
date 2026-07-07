@@ -1,0 +1,14 @@
+Django~=5.1
+fastapi~=0.115
+uvicorn[standard]~=0.34
+pydantic~=2.10
+email-validator~=2.2
+pydantic-settings~=2.7
+psycopg[binary]~=3.2
+redis~=5.2
+celery~=5.4
+PyJWT~=2.10
+pgvector~=0.3
+httpx~=0.28
+fastembed~=0.5
+python-multipart~=0.0.20

@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  backend-tests:
+    runs-on: [self-hosted, linux, x64]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build images
+        run: docker compose build db backend
+
+      - name: Start database
+        run: docker compose up -d db redis --wait
+
+      - name: Run tests
+        run: docker compose run --rm backend pytest
+
+      - name: Lint
+        run: docker compose run --rm backend ruff check .
+
+  frontend-build:
+    runs-on: [self-hosted, linux, x64]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install and build
+        working-directory: frontend
+        run: |
+          npm install
+          npm run build

@@ -1,0 +1,128 @@
+name: routehub
+
+services:
+  db:
+    build: ./db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-routehub}
+      POSTGRES_USER: ${POSTGRES_USER:-routehub}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-routehub}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-routehub} -d ${POSTGRES_DB:-routehub}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.12
+    environment:
+      MEILI_ENV: development
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-dev-meili-master-key-not-for-prod}
+    volumes:
+      - meilidata:/meili_data
+    ports:
+      - "7700:7700"
+
+  backend:
+    build: ./backend
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      POSTGRES_HOST: db
+      REDIS_URL: redis://redis:6379/0
+      MEILI_URL: http://meilisearch:7700
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-dev-meili-master-key-not-for-prod}
+      EMBEDDING_BACKEND: ${EMBEDDING_BACKEND:-hash}
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./backend:/app
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      meilisearch:
+        condition: service_started
+
+  worker:
+    build: ./backend
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      POSTGRES_HOST: db
+      REDIS_URL: redis://redis:6379/0
+      MEILI_URL: http://meilisearch:7700
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-dev-meili-master-key-not-for-prod}
+      EMBEDDING_BACKEND: ${EMBEDDING_BACKEND:-hash}
+    command: celery -A config worker --loglevel=info
+    volumes:
+      - ./backend:/app
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  beat:
+    build: ./backend
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      POSTGRES_HOST: db
+      REDIS_URL: redis://redis:6379/0
+    command: celery -A config beat --loglevel=info
+    volumes:
+      - ./backend:/app
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    command: npm run dev -- --host 0.0.0.0
+    environment:
+      DOCKER: "1"
+      VITE_API_BASE: ${VITE_API_BASE:-/api/v1}
+      VITE_MAPBOX_TOKEN: ${VITE_MAPBOX_TOKEN:-}
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+  # Optional: self-hosted OSRM. Requires prepared OSM extract in ./osrm-data.
+  # See README "Routing engine" section, then: docker compose --profile routing up
+  osrm:
+    image: ghcr.io/project-osrm/osrm-backend:latest
+    profiles: ["routing"]
+    command: osrm-routed --algorithm mld /data/map.osrm
+    volumes:
+      - ./osrm-data:/data
+    ports:
+      - "5000:5000"
+
+volumes:
+  pgdata:
+  meilidata:
+  frontend_node_modules:
