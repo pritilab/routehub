@@ -9,7 +9,9 @@ check in at places, review POIs, save routes, and stay updated via a personalize
 **Documentation**: [Architecture](docs/architecture.md) ·
 [Data model](docs/data-model.md) · [API reference](docs/api.md) ·
 [Mobile app](docs/mobile-app.md) · [Roadmap](docs/roadmap.md) ·
-[Business plan (RU)](docs/business-plan.md)
+[Business plan (RU)](docs/business-plan.md) ·
+[Germany launch plan (RU)](docs/business-plan-de.md) ·
+[Founder guide (RU)](docs/founder-recommendations.md)
 
 ---
 

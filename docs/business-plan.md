@@ -1,8 +1,15 @@
 # RouteHub — Бизнес-план
 
-Версия: 1.0 (июль 2026). Основатель: Dmitriy Petrov ([github.com/pritilab](https://github.com/pritilab)),
-Амстердам. Статус продукта: работающий MVP (web + Android + API), см. [roadmap.md](roadmap.md).
+Версия: 1.1 (июль 2026). Основатель: Dmitriy Petrov ([github.com/pritilab](https://github.com/pritilab)).
+Статус продукта: работающий MVP (web + Android + API), см. [roadmap.md](roadmap.md).
 
+> Общий (EU-широкий) план. Операционный план первого рынка — **старт из
+> Bad Oeynhausen, Германия**: [business-plan-de.md](business-plan-de.md);
+> юридическая и грантовая стратегия фаундера (§24 AufenthG):
+> [founder-recommendations.md](founder-recommendations.md). Упоминания
+> Амстердама ниже описывают исходную концепцию «пилот в туристическом
+> городе» — фактический пилот перенесён в Bad Oeynhausen.
+>
 > Числовые оценки рынка и конверсий в этом документе — рабочие гипотезы для
 > планирования, а не результаты платного исследования. Пункты, требующие
 > проверки на реальных данных, помечены «⚠ гипотеза».
