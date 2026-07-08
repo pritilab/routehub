@@ -245,7 +245,7 @@ docker compose --profile routing up
 - `SECRET_KEY` — 32-byte hex Django secret
 
 **Optional**:
-- `EMBEDDING_BACKEND` — `hash` (dev) or `fastembet` (production, downloads ONNX model ~100MB)
+- `EMBEDDING_BACKEND` — `hash` (dev) or `fastembed` (production, downloads ONNX model ~100MB)
 - `OSRM_URL` — if you run a self-hosted routing engine
 - `VITE_MAPBOX_TOKEN` — from mapbox.com for interactive maps
 
