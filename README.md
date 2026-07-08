@@ -6,6 +6,11 @@ check in at places, review POIs, save routes, and stay updated via a personalize
 
 **Repository**: [pritilab/routehub](https://github.com/pritilab/routehub)
 
+**Documentation**: [Architecture](docs/architecture.md) ·
+[Data model](docs/data-model.md) · [API reference](docs/api.md) ·
+[Mobile app](docs/mobile-app.md) · [Roadmap](docs/roadmap.md) ·
+[Business plan (RU)](docs/business-plan.md)
+
 ---
 
 ## Stack
