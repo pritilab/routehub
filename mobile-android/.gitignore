@@ -1,0 +1,12 @@
+# Gradle / build
+.gradle/
+build/
+.kotlin/
+
+# Local machine config (SDK path, API base URL)
+local.properties
+
+# IDE
+.idea/
+*.iml
+captures/

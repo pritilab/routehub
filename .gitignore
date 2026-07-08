@@ -12,7 +12,7 @@ node_modules/
 dist/
 .vite/
 
-# Env / secrets
+# Env / secrets (local dev overrides, never commit)
 .env
 .env.local
 *.local.yml
@@ -29,3 +29,7 @@ Thumbs.db
 # Django
 staticfiles/
 media/
+
+# Celery beat runtime state
+celerybeat-schedule
+celerybeat-schedule.*
